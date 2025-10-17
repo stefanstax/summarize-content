@@ -1,0 +1,5 @@
+{
+  "name": "Summary Any Content",
+  "description": "An application that takes a URL, crawls the page using Gemini API with Google Search grounding, and provides a 100-word summary along with citation sources.",
+  "requestFramePermissions": []
+}
