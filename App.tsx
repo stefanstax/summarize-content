@@ -6,6 +6,7 @@ import SummaryDisplay from "./components/SummaryDisplay";
 import Loader from "./components/Loader";
 import ErrorMessage from "./components/ErrorMessage";
 import SparklesIcon from "./components/icons/SparklesIcon";
+import { validKeys } from "./valid_keys";
 
 const App: React.FC = () => {
   const [text, setText] = useState<string>("");
@@ -13,10 +14,22 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [language, setLanguage] = useState<string>("English");
+  const [secretKey, setSecretKey] = useState<string>("");
+  const VALID_KEYS = (validKeys || "")
+    .split(",")
+    .map((key) => key.trim())
+    .filter((key) => key !== "");
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent) => {
       event.preventDefault();
+
+      if (!VALID_KEYS.includes(secretKey)) {
+        setError(
+          "Invalid secret key. Please provide a valid key to use the summarizer."
+        );
+        return;
+      }
 
       if (!text.trim()) {
         setError("Please paste some text to summarize.");
@@ -51,7 +64,7 @@ const App: React.FC = () => {
         setIsLoading(false);
       }
     },
-    [text, language]
+    [text, language, secretKey]
   );
 
   return (
@@ -84,6 +97,23 @@ const App: React.FC = () => {
               <option value="English">English</option>
               <option value="Serbian">Serbian</option>
             </select>
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="secret-key-input"
+              className="block text-sm font-medium text-slate-300 mb-2"
+            >
+              Secret Key
+            </label>
+            <input
+              id="secret-key-input"
+              type="password"
+              value={secretKey}
+              onChange={(e) => setSecretKey(e.target.value)}
+              placeholder="Enter your secret key"
+              disabled={isLoading}
+              className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-md focus:ring-2 focus:ring-[#5152fb] focus:outline-none transition-shadow duration-200 disabled:opacity-50"
+            />
           </div>
 
           <TextInput

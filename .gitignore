@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .env
+valid_keys.tsx
 
 # Editor directories and files
 .vscode/*
